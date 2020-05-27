@@ -9,7 +9,7 @@ import Axios from "axios";
 Vue.config.productionTip = false
 Vue.use(VueRouter);
 Vue.use(AntDesign);
-// Axios.defaults.withCredentials = true;
+Axios.defaults.withCredentials = true;
 Axios.defaults.baseURL = "http://127.0.0.1:8080/"
 Vue.prototype.$axios = Axios;
 new Vue({
