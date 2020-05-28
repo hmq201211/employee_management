@@ -1,95 +1,78 @@
 <template>
     <div>
-        <a-table :columns="columns" :data-source="data">
+        <a-table :columns="columns" :data-source="data" rowKey="employeeId">
             <a slot="name" slot-scope="text">{{ text }}</a>
-            <span slot="customTitle"><a-icon type="smile-o"/> Name</span>
-            <span slot="tags" slot-scope="tags">
-      <a-tag
-              v-for="tag in tags"
-              :key="tag"
-              :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'"
-      >
-        {{ tag.toUpperCase() }}
-      </a-tag>
-    </span>
+            <span slot="myTitle"><a-icon type="smile-o"/> Name</span>
             <span slot="action" slot-scope="text, record">
-      <a>Invite 一 {{ record.name }}</a>
-      <a-divider type="vertical"/>
-      <a>Delete</a>
-      <a-divider type="vertical"/>
-      <a class="ant-dropdown-link"> More actions <a-icon type="down"/> </a>
-    </span>
+              <a @click="handleUpdate(record)">Update</a>
+              <a-divider type="vertical"/>
+              <a @click="handleDelete(record)">Delete</a>
+            </span>
         </a-table>
+        <a-button @click="handleUpdate({employeeId:-1})">添加员工</a-button>
     </div>
 </template>
 <script>
     const columns = [
         {
-            dataIndex: 'name',
-            key: 'name',
-            slots: {title: 'customTitle'},
+            title: "employeeId",
+            dataIndex: 'employeeId',
+        },
+        {
+            dataIndex: 'employeeName',
+            slots: {title: 'myTitle'},
             scopedSlots: {customRender: 'name'},
         },
         {
-            title: 'Age',
-            dataIndex: 'age',
-            key: 'age',
+            title: 'employeeBirthday',
+            dataIndex: 'employeeBirthday',
         },
         {
-            title: 'Address',
-            dataIndex: 'address',
-            key: 'address',
-        },
-        {
-            title: 'Tags',
-            key: 'tags',
-            dataIndex: 'tags',
-            scopedSlots: {customRender: 'tags'},
+            title: 'employeeEmail',
+            dataIndex: 'employeeEmail',
         },
         {
             title: 'Action',
-            key: 'action',
             scopedSlots: {customRender: 'action'},
         },
     ];
-
-    const data = [
-        {
-            key: '1',
-            name: 'John Brown',
-            age: 32,
-            address: 'New York No. 1 Lake Park',
-            tags: ['nice', 'developer'],
-        },
-        {
-            key: '2',
-            name: 'Jim Green',
-            age: 42,
-            address: 'London No. 1 Lake Park',
-            tags: ['loser'],
-        },
-        {
-            key: '3',
-            name: 'Joe Black',
-            age: 32,
-            address: 'Sidney No. 1 Lake Park',
-            tags: ['cool', 'teacher'],
-        },
-    ];
-
     export default {
         name: "list",
         data() {
             return {
-                data,
+                data: [],
                 columns,
+                departments: []
             };
         },
         activated() {
-            this.$axios.get("/employee/li").then(res => {
-                console.log(res);
-            })
+            this.loadEmployeeList();
         },
-        methods: {}
+        methods: {
+            loadEmployeeList() {
+                this.$axios.get("/employee/li").then(res => {
+                    if (res.data.code === 200) {
+                        this.data = res.data.data;
+                    } else {
+                        this.$message.error(res.data.msg);
+                        this.$router.push("/");
+                    }
+                })
+            },
+            handleUpdate(record) {
+                this.$router.push({path: `/employee/modify/${record.employeeId}`});
+            },
+            handleDelete(record) {
+                let data = new FormData();
+                data.append("employeeId", record.employeeId);
+                this.$axios.post("/employee/del", data).then(res => {
+                    if (res.data.code === 200) {
+                        this.loadEmployeeList();
+                    } else {
+                        this.$message.error(res.data.msg);
+                    }
+                })
+            }
+        }
     };
 </script>

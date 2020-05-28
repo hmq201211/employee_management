@@ -1,8 +1,9 @@
 import VueRouter from "vue-router";
-import list from "@/components/employee/list";
-import index from "@/components/index";
+import list from "../components/employee/list";
+import modify from "../components/employee/modify";
+import index from "../components/index";
 
-export const router = new VueRouter({
+const router = new VueRouter({
     mode: "history",
     routes: [
         {
@@ -19,6 +20,14 @@ export const router = new VueRouter({
             component: list,
             meta: {
                 keepAlive: true
+            }
+        },
+        {
+            name: "员工修改页",
+            path: "/employee/modify/:employeeId",
+            component: modify,
+            meta: {
+                keepAlive: false
             }
         }
     ]

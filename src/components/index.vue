@@ -31,10 +31,10 @@
                 e.preventDefault();
                 this.form.validateFields((err, values) => {
                     if (!err) {
-                        this.$axios.post("/userLogin", {
+                        this.$axios.post("/userLogin", this.$qs.stringify({
                             "username": values.username,
                             "password": values.password
-                        }).then(res => {
+                        })).then(res => {
                             if (res.data.code === 200) {
                                 this.$router.push("/employee/list");
                             } else {
