@@ -50,7 +50,7 @@
         },
         methods: {
             loadEmployeeList() {
-                this.$axios.get("/employee/li").then(res => {
+                this.$axios.get("/emp/li").then(res => {
                     if (res.data.code === 200) {
                         this.data = res.data.data;
                     } else {
@@ -65,7 +65,7 @@
             handleDelete(record) {
                 let data = new FormData();
                 data.append("employeeId", record.employeeId);
-                this.$axios.post("/employee/del", data).then(res => {
+                this.$axios.post("/emp/del", data).then(res => {
                     if (res.data.code === 200) {
                         this.loadEmployeeList();
                     } else {

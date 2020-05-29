@@ -62,7 +62,7 @@
         methods: {
             loadEmployeeInfo() {
                 if (this.$route.params.employeeId !== "-1")
-                    this.$axios.get(`/employee/look/${this.$route.params.employeeId}`).then(res => {
+                    this.$axios.get(`/emp/look/${this.$route.params.employeeId}`).then(res => {
                         if (res.data.code === 200) {
                             let employeeInfo = res.data.data;
                             this.form.setFieldsValue({"employeeName": employeeInfo.employeeName})
@@ -77,7 +77,7 @@
                     });
             },
             loadDepartmentList() {
-                this.$axios.get("/department/li").then(res => {
+                this.$axios.get("/dep/li").then(res => {
                     if (res.data.code === 200) {
                         this.departments = res.data.data;
                     } else {
@@ -105,7 +105,7 @@
                             "employeeDepartment": department,
                             "employeeGender": values.employeeGender
                         };
-                        let url = this.$route.params.employeeId === "-1" ? "/employee/add" : "/employee/update";
+                        let url = this.$route.params.employeeId === "-1" ? "/emp/add" : "/emp/update";
                         if (this.$route.params.employeeId !== "-1") {
                             data.employeeId = this.$route.params.employeeId;
                         }
