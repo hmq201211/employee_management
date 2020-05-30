@@ -90,7 +90,7 @@
                 e.preventDefault();
                 this.form.validateFields((err, values) => {
                     if (!err) {
-                        let department;
+                        let department = {};
                         this.departments.forEach(item => {
                             if (item.departmentId === values.employeeDepartment)
                                 department = {
